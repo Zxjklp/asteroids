@@ -22,8 +22,14 @@ def main():
     # creating a clock object to help track time
     clock = pygame.time.Clock() 
 
-    # Create player in center of screen
+    # Create sprite groups
+    updatables = pygame.sprite.Group()
+    drawables = pygame.sprite.Group()
+
+    # Create player and add to groups
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    updatables.add(player)
+    drawables.add(player)
 
     # delta time variable that will be used to keep track of the time that has passed since the last frame
     dt = 0 
@@ -34,8 +40,12 @@ def main():
         # fill the screen with black color
         screen.fill((0, 0, 0)) 
 
-        # Draw player
-        player.draw(screen)
+        # Update all sprites
+        updatables.update(dt)
+
+        # Draw all sprites
+        for sprite in drawables:
+            sprite.draw(screen)
 
         # get all the events that have occurred since the last frame
         for event in pygame.event.get(): 
