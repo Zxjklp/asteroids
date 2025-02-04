@@ -6,6 +6,8 @@ from constants import *
 
 # importing the Player class from the player.py file
 from player import Player 
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 # main function that will run the game
 def main(): 
@@ -23,13 +25,20 @@ def main():
     clock = pygame.time.Clock() 
 
     # Create sprite groups
-    updatables = pygame.sprite.Group()
-    drawables = pygame.sprite.Group()
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
+
+    Asteroid.containers = (asteroids, updatable, drawable)
+    AsteroidField.containers = (updatable,)
 
     # Create player and add to groups
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    updatables.add(player)
-    drawables.add(player)
+    # Player.containers = (updatable, drawable)
+    updatable.add(player)
+    drawable.add(player)
+
+    asteroid_field = AsteroidField()
 
     # delta time variable that will be used to keep track of the time that has passed since the last frame
     dt = 0 
@@ -41,10 +50,10 @@ def main():
         screen.fill((0, 0, 0)) 
 
         # Update all sprites
-        updatables.update(dt)
+        updatable.update(dt)
 
         # Draw all sprites
-        for sprite in drawables:
+        for sprite in drawable:
             sprite.draw(screen)
 
         # get all the events that have occurred since the last frame
